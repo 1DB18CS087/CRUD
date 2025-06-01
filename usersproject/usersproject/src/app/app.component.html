@@ -1,0 +1,86 @@
+<h2 style="text-align: center; font-weight: bold;">User Management</h2>
+
+<div>
+  <button (click)="addUser()" class="custom-btn">Add User</button>
+</div>
+
+<!-- Table -->
+<table *ngIf="users.length > 0" class="user-table">
+  <thead>
+    <tr>
+      <th (click)="sort('name')" style="cursor:pointer;">
+        Name
+        <span *ngIf="sortColumn === 'name'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      </th>
+      <th (click)="sort('age')" style="cursor:pointer;">
+        Age
+        <span *ngIf="sortColumn === 'age'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      </th>
+      <th (click)="sort('email')" style="cursor:pointer;">
+        Email
+        <span *ngIf="sortColumn === 'email'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      </th>
+      <th (click)="sort('gender')" style="cursor:pointer;">
+        Gender
+        <span *ngIf="sortColumn === 'gender'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of paginatedUsers">
+      <td>{{ user.name }}</td>
+      <td>{{ user.age }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.gender }}</td>
+      <td>
+        <button (click)="editUser(user)">Edit</button>
+        <button (click)="deleteUser(user._id)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination-controls" *ngIf="users.length > pageSize">
+  <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+  <span>Page {{ currentPage }}</span>
+  <button (click)="nextPage()" [disabled]="currentPage * pageSize >= users.length">Next</button>
+</div>
+
+<!-- Dialog for Add/Edit User -->
+<div class="dialog-overlay" *ngIf="showDialog">
+  <div class="dialog-box">
+    <h3>{{ isEditMode ? 'Edit' : 'Add' }} User</h3>
+
+    <label>Name:
+      <input type="text" [(ngModel)]="userData.name" />
+    </label>
+
+    <label>Age:
+      <input type="number" [(ngModel)]="userData.age" />
+    </label>
+
+    <label>Email:
+      <input type="email" [(ngModel)]="userData.email" />
+    </label>
+
+    <label>Gender:
+      <select [(ngModel)]="userData.gender">
+        <option value="">Select</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+    </label>
+
+    <label>Password:
+      <input type="password" [(ngModel)]="userData.password" />
+    </label>
+
+    <div class="dialog-actions">
+      <button (click)="closeDialog()">Cancel</button>
+      <button (click)="saveUser()">{{ isEditMode ? 'Update' : 'Save' }}</button>
+    </div>
+  </div>
+</div>
